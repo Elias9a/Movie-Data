@@ -113,4 +113,4 @@ for (const movieTitle in movieData) {
 
   movieList.appendChild(div);
 }
-  
+ 
