@@ -33,84 +33,131 @@ let movieData = {
       cast: ["Ralph Fiennes", " F. Murray Abraham", " Mathieu Amalric"],
     },
   };
+
   const movieList = document.getElementById('movie-list');
 
-for (const movieTitle in movieData) {
-  const movie = movieData[movieTitle];
-  const div = document.createElement('div');
-  div.classList.add('list');
-  const title = document.createElement('h2');
-  const plot = document.createElement('p');
-  const cast = document.createElement('p');
-  const runtime = document.createElement('p');
-  const rating = document.createElement('p');
-  const year = document.createElement('p');
-  const editButton = document.createElement('button');
+  function moviesCard(movieTitle, movie) {
+    
+    // for (const movieTitle in movieData) {
+    //   const movie = movieData[movieTitle];
+      const div = document.createElement('div');
+      div.classList.add('list');
+      const title = document.createElement('h2');
+      const plot = document.createElement('p');
+      const cast = document.createElement('p');
+      const runtime = document.createElement('p');
+      const rating = document.createElement('p');
+      const year = document.createElement('p');
+      const editButton = document.createElement('button');
+      
+      title.innerText = movieTitle;
+      plot.innerText = movie.plot;
+      cast.innerHTML = `Cast: ${movie.cast}`
+      runtime.innerText = `Runtime: ${movie.runtime} minutes`;
+      rating.innerText = `Rating: ${movie.rating}`;
+      year.innerText = `Year: ${movie.year}`;
+      editButton.innerText = 'Edit';
+      
+      editButton.addEventListener('click', () => {
+        const form = document.createElement('form');
+        const plotInput = document.createElement('input');
+        const castInput = document.createElement('input');
+        const runtimeInput = document.createElement('input');
+        const ratingInput = document.createElement('input');
+        const yearInput = document.createElement('input');
+        const submitButton = document.createElement('button');
+        
+        plotInput.value = movie.plot;
+        castInput.value = movie.cast.join(', ');
+        runtimeInput.value = movie.runtime;
+        ratingInput.value = movie.rating;
+        yearInput.value = movie.year;
+        submitButton.innerText = 'Save';
+        
+        form.appendChild(plotInput);
+        form.appendChild(castInput);
+        form.appendChild(runtimeInput);
+        form.appendChild(ratingInput);
+        form.appendChild(yearInput);
+        form.appendChild(submitButton);
+        
+        submitButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          
+          const updatedMovieData = {
+            plot: plotInput.value,
+            cast: castInput.value.split(',').map(name => name.trim()),
+            runtime: parseInt(runtimeInput.value),
+            rating: parseFloat(ratingInput.value),
+            year: parseInt(yearInput.value),
+          };
+          
+          movieData[movieTitle] = updatedMovieData;
+          
+          plot.innerText = updatedMovieData.plot;
+          cast.innerHTML = `Cast: ${updatedMovieData.cast}`;
+          runtime.innerText = `Runtime: ${updatedMovieData.runtime} minutes`;
+          rating.innerText = `Rating: ${updatedMovieData.rating}`;
+          year.innerText = `Year: ${updatedMovieData.year}`;
+          
+          form.remove();
+        });
+        
+        div.appendChild(form);
+      });
+      
+      div.appendChild(title);
+      div.appendChild(plot);
+      div.appendChild(cast);
+      div.appendChild(runtime);
+      div.appendChild(rating);
+      div.appendChild(year);
+      div.appendChild(editButton);
+      
+      return div;
+    // }
+  }
 
-  title.innerText = movieTitle;
-  plot.innerText = movie.plot;
-  cast.innerHTML = `Cast: ${movie.cast}`
-  runtime.innerText = `Runtime: ${movie.runtime} minutes`;
-  rating.innerText = `Rating: ${movie.rating}`;
-  year.innerText = `Year: ${movie.year}`;
-  editButton.innerText = 'Edit';
-
-  editButton.addEventListener('click', () => {
-    const form = document.createElement('form');
-    const plotInput = document.createElement('input');
-    const castInput = document.createElement('input');
-    const runtimeInput = document.createElement('input');
-    const ratingInput = document.createElement('input');
-    const yearInput = document.createElement('input');
-    const submitButton = document.createElement('button');
-
-    plotInput.value = movie.plot;
-    castInput.value = movie.cast.join(', ');
-    runtimeInput.value = movie.runtime;
-    ratingInput.value = movie.rating;
-    yearInput.value = movie.year;
-    submitButton.innerText = 'Save';
-
-    form.appendChild(plotInput);
-    form.appendChild(castInput);
-    form.appendChild(runtimeInput);
-    form.appendChild(ratingInput);
-    form.appendChild(yearInput);
-    form.appendChild(submitButton);
-
-    submitButton.addEventListener('click', (event) => {
-      event.preventDefault();
-
-      const updatedMovieData = {
-        plot: plotInput.value,
-        cast: castInput.value.split(',').map(name => name.trim()),
-        runtime: parseInt(runtimeInput.value),
-        rating: parseFloat(ratingInput.value),
-        year: parseInt(yearInput.value),
-      };
-
-      movieData[movieTitle] = updatedMovieData;
-
-      plot.innerText = updatedMovieData.plot;
-      cast.innerHTML = `Cast: ${updatedMovieData.cast}`;
-      runtime.innerText = `Runtime: ${updatedMovieData.runtime} minutes`;
-      rating.innerText = `Rating: ${updatedMovieData.rating}`;
-      year.innerText = `Year: ${updatedMovieData.year}`;
-
-      form.remove();
-    });
-
-    div.appendChild(form);
-  });
-
-  div.appendChild(title);
-  div.appendChild(plot);
-  div.appendChild(cast);
-  div.appendChild(runtime);
-  div.appendChild(rating);
-  div.appendChild(year);
-  div.appendChild(editButton);
-
-  movieList.appendChild(div);
+    //sorting content by criteria
+function renderMoviesList(sortedDataMovie) {
+  movieList.innerHTML = '';
+  for (let movieTitle in sortedDataMovie) {
+    const movie = sortedDataMovie[movieTitle];
+    let card = moviesCard(movieTitle, movie);
+    movieList.appendChild(card);
+  }
 }
+
+renderMoviesList(movieData)
+//sorting ontent by criteria
+const sortMoviesBy = (sorting) => {
+  const sortedDataMovie = {}
+  movieList.innerHTML = ''
+  if(sorting === 'year') {
+    
+    Object.keys(movieData).sort((a, b) => movieData[a].year - movieData[b].year)
+    .forEach(title => sortedDataMovie[title] = movieData[title])
+  }
+  else if(sorting === 'title') {
+    
+    Object.keys(movieData).sort()
+    .forEach(title => sortedDataMovie[title] = movieData[title])
+  }
+  else if(sorting === 'rating') {
+    
+    Object.keys(movieData).sort((a, b) => movieData[a].rating - movieData[b].rating)
+    .forEach(rating => sortedDataMovie[rating] = movieData[rating])
+  }
+  else if(sorting === 'runtime') {
+    
+    Object.keys(movieData).sort((a, b) => movieData[a].runtime - movieData[b].runtime)
+    .forEach(runtime => sortedDataMovie[runtime] = movieData[runtime])
+  }
+renderMoviesList(sortedDataMovie)
+      
+}
+  
+
+  
+
  

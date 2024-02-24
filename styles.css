@@ -31,6 +31,7 @@ button {
     margin: 1rem;
     text-overflow: none;
     flex-wrap: wrap; 
+    margin: 1rem;
 }
 
 .list {
@@ -38,8 +39,34 @@ button {
     width: 30vw;
     flex-direction: column;
     margin: 1rem;
+    width: 30vw;
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
 }
 
 p{
     margin: 0.3em 0;
+}
+
+button {
+    margin: 1rem 0.5em;
+    font-size: 1rem;
+    padding: 0.5em;
+    border-radius: 0.4em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.edit-button {
+    margin-top: auto;
 }
